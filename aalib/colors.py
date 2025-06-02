@@ -1,3 +1,4 @@
+import random
 import sys
 from enum import Flag, auto
 
@@ -15,6 +16,12 @@ class FMT(Flag):
     GRAY = auto()
     UNDERLINE = auto()
     RESET = auto()
+
+    @staticmethod
+    def random():
+        return random.choice(
+            (FMT.RED, FMT.BLUE, FMT.YELLOW, FMT.GREEN, FMT.MAGENTA, FMT.ORANGE)
+        )
 
     def __str__(self) -> str:
         if not COLOR_SUPPORT:

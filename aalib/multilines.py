@@ -90,8 +90,10 @@ if __name__ == "__main__":
         time.sleep(0.1)
 
     bars = [
-        progress(range(25), file=ctx.ostream_for(i), color=c, message=f"bar {i}")
-        for i, c in enumerate((FMT.BLUE, FMT.MAGENTA, FMT.RED, FMT.YELLOW))
+        progress(
+            range(25), file=ctx.ostream_for(i), color=FMT.random(), message=f"bar {i}"
+        )
+        for i in range(4)
     ]
 
     elems = list(range(4)) * 25
