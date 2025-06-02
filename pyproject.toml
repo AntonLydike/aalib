@@ -1,7 +1,8 @@
 [project]
 name = "aalib"
 version = "0.1.0"
-description = "Add your description here"
+description = "Collectin of neat things"
+license = "AGPL-3.0-or-later"
 readme = "README.md"
 authors = [
     { name = "Anton Lydike", email = "me@antonlydike.de" }
