@@ -85,21 +85,23 @@ def progress(
     color: FMT = FMT.RESET,
     file=sys.stdout,
     max_bar_size: int = 80,
-    count: int | None = None
+    count: int | None = None,
+    sample: int = 1,
 ):
     a0 = time.time()
     if count is None:
         count = len(seq)
     for i, e in enumerate(seq):
-        simple_progress(
-            i,
-            count,
-            a0,
-            message=message,
-            color=color,
-            file=file,
-            max_bar_size=max_bar_size,
-        )
+        if i % sample == 0:
+            simple_progress(
+                i,
+                count,
+                a0,
+                message=message,
+                color=color,
+                file=file,
+                max_bar_size=max_bar_size,
+            )
         yield e
 
 
