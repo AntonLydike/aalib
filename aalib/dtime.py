@@ -16,7 +16,7 @@ def fmt_dtime(t: datetime.datetime | datetime.date) -> str:
         if t == today - day:
             return "yesterday"
         if abs(t - today) < week:
-            days = abs(t-today).days
+            days = abs(t - today).days
             if (t - today).total_seconds() < 0:
                 return f"{days} days ago"
             else:
@@ -29,7 +29,7 @@ def fmt_dtime(t: datetime.datetime | datetime.date) -> str:
         return f"tomorrow at {t:%H:%M}"
     if t.date() == today - day:
         return f"yesterday at {t:%H:%M}"
-    diff = (t.date() - today)
+    diff = t.date() - today
     diff_seconds = diff.total_seconds()
     if abs(diff) < week:
         if diff_seconds < 0:
@@ -40,7 +40,9 @@ def fmt_dtime(t: datetime.datetime | datetime.date) -> str:
             return f"in {diff.days} days at {t:%H:%M}"
     return f"{t:%Y-%m-%d} at {t:%H:%M}"
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     import sys
+
     d = datetime.datetime.fromisoformat(sys.argv[-1])
     print(fmt_dtime(d))

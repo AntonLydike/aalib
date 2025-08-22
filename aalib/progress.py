@@ -1,11 +1,31 @@
+from dataclasses import dataclass
 import sys
 import time
 import math
 import shutil
 from collections.abc import Sequence
+from typing import Callable
 
+from aalib.bytefmt import bytefmt
 from aalib.duration import duration
 from aalib.colors import FMT
+
+
+@dataclass
+class ProgressFmtSpec:
+    elem_fmt: Callable[[int, int], str]
+    report: Callable[[int | float, int | float], str]
+
+
+ElemSpec = ProgressFmtSpec(
+    elem_fmt=lambda done, ttl: f"{done:0{math.ceil(math.log10(ttl))}}/{ttl}",
+    report=lambda avg_time, avg_throughput: f"({duration(avg_time)}/elem)",
+)
+
+BytesSpec = ProgressFmtSpec(
+    elem_fmt=lambda done, ttl: f"{bytefmt(done)}/{bytefmt(ttl)}",
+    report=lambda avg_time, avg_throughput: f"({bytefmt(avg_throughput)}/s)",
+)
 
 
 def simple_progress(
@@ -16,10 +36,12 @@ def simple_progress(
     color: FMT = FMT.RESET,
     file=sys.stdout,
     max_bar_size: int = 80,
+    fmt_spec: ProgressFmtSpec = ElemSpec,
 ):
     percent = 100 * (current + 1) // total
     elapsed = time.time() - start_time
     avg_time = elapsed / (current + 1)
+    avg_throughput = (current + 1) / elapsed
     remaining = duration(avg_time * (total - current - 1))
     size = math.ceil(math.log10(total))
 
@@ -27,9 +49,9 @@ def simple_progress(
 
     parts = [
         f"{percent}%",
-        f"({current:0{size}}/{total})",
+        fmt_spec.elem_fmt(current, total),
         f"ETA: {remaining}",
-        f"({duration(avg_time)}/elem)",
+        fmt_spec.report(avg_time, avg_throughput),
     ]
 
     if message:
@@ -111,4 +133,10 @@ if __name__ == "__main__":
 
     time.sleep(0.5)
     for _ in progress(range(100), max_bar_size=6, color=FMT.RED):
+        time.sleep(0.01)
+
+    time.sleep(0.5)
+    t0 = time.time()
+    for i in range(100):
+        simple_progress(i * 100000, 100 * 100000, t0, fmt_spec=BytesSpec)
         time.sleep(0.01)
