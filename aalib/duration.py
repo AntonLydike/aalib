@@ -20,13 +20,16 @@ _time_divisions = (
 )
 
 
-def duration(dur_in_seconds: float) -> str:
+def duration(dur_in_seconds: float, map_nan:str = "NaN") -> str:
     """
     Convert a duration in seconds to a string
 
     :param dur_in_seconds:
     :return:
     """
+    # check NaN
+    if dur_in_seconds != dur_in_seconds:
+        return map_nan
     if dur_in_seconds <= 0:
         return "0s"
     if dur_in_seconds < 60:
