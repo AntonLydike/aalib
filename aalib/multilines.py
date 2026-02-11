@@ -78,7 +78,7 @@ class MultilineCtx:
 if __name__ == "__main__":
     import random
     from aalib.progress import progress
-    from aalib.colors import FMT
+    from aalib.colors import Color
 
     ctx = MultilineCtx(4)
     for l in range(4):
@@ -91,7 +91,7 @@ if __name__ == "__main__":
 
     bars = [
         progress(
-            range(25), file=ctx.ostream_for(i), color=FMT.random(), message=f"bar {i}"
+            range(25), file=ctx.ostream_for(i), color=Color.random(), message=f"bar {i}"
         )
         for i in range(4)
     ]

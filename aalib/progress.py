@@ -8,7 +8,7 @@ from typing import Callable
 
 from aalib.bytefmt import bytefmt
 from aalib.duration import duration
-from aalib.colors import FMT
+from aalib.colors import Color, Format
 
 
 @dataclass
@@ -33,7 +33,7 @@ def simple_progress(
     total: int,
     start_time: float,
     message: str = "",
-    color: FMT = FMT.RESET,
+    color: Color | Format = Format.RESET,
     file=sys.stdout,
     max_bar_size: int = 80,
     fmt_spec: ProgressFmtSpec = ElemSpec,
@@ -71,11 +71,11 @@ def simple_progress(
         bar = (
             "━" * (filled_len - 1)
             + "╸"
-            + str(FMT.RESET | FMT.GRAY)
+            + str(Format(Color.WHITE, reset=True))
             + "━" * (bar_len - filled_len)
         )
 
-    line = f"{color}{bar}{FMT.RESET} {' '.join(parts)}"
+    line = f"{color}{bar}{Format.RESET} {' '.join(parts)}"
     space = " " * (term_width - len(line))
 
     print(
@@ -104,7 +104,7 @@ def braille_progress(percent: float, char_width: int) -> str:
 def progress(
     seq: Sequence,
     message: str = "",
-    color: FMT = FMT.RESET,
+    color: Format | Color = Format.RESET,
     file=sys.stdout,
     max_bar_size: int = 80,
     count: int | None = None,
@@ -132,7 +132,7 @@ if __name__ == "__main__":
         time.sleep(0.1)
 
     time.sleep(0.5)
-    for _ in progress(range(100), max_bar_size=6, color=FMT.RED):
+    for _ in progress(range(100), max_bar_size=6, color=Color.RED):
         time.sleep(0.01)
 
     time.sleep(0.5)
