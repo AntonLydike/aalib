@@ -9,11 +9,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: publishing
     permissions:
       # IMPORTANT: this permission is mandatory for trusted publishing
       id-token: write
-    steps:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
